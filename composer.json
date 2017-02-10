@@ -1,0 +1,25 @@
+{
+  "name": "gotovsky/sitemap",
+  "description": "Generate sitemap",
+  "keywords": [
+    "sitemap"
+  ],
+  "homepage": "http://github.com/gotovsky/sitemap",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Michael Gotovsky",
+      "email": "skygsn@gmail.com",
+      "homepage": "http://gotovsky.com"
+    }
+  ],
+  "require": {
+    "php": ">=5.4"
+  },
+  "autoload": {
+    "psr-4": {
+      "Skygsn\\": "src/Skygsn"
+    }
+  }
+}
