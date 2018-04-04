@@ -25,7 +25,9 @@ class MemoryStorage implements Storage
      */
     public function clean()
     {
-        fclose($this->resource);
+        if (is_resource($this->resource)) {
+            fclose($this->resource);
+        }
     }
 
     /**
