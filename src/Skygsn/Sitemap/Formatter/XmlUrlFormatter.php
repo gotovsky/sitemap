@@ -11,11 +11,11 @@ class XmlUrlFormatter implements UrlFormatter
      */
     public function format(Url $url)
     {
-        return "
-    <url>
-        <loc>" . $url->getLocation() . '</loc>
-        <priority>' . $url->getPriority() . '</priority>
-        <changefreq>' . $url->getChangeFrequency() . '</changefreq>
-    </url>';
+        return sprintf(
+            '<url><loc>%s</loc><priority>%s</priority><changefreq>%s</changefreq></url>',
+            $url->getLocation(),
+            $url->getPriority(),
+            $url->getChangeFrequency()
+        );
     }
 }
