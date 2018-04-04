@@ -10,11 +10,6 @@ class Sitemap
     private $name;
 
     /**
-     * @var string
-     */
-    private $url;
-
-    /**
      * @var Url[]
      */
     private $urls;
@@ -26,14 +21,12 @@ class Sitemap
 
     /**
      * @param string $name
-     * @param string $url
      * @param Url[] $urls
      * @param string $lastModified
      */
-    public function __construct($name, $url, array $urls, $lastModified)
+    public function __construct(array $urls, string $name, $lastModified)
     {
         $this->name = $name;
-        $this->url = $url;
         $this->urls = $urls;
         $this->lastModified = $lastModified;
     }
@@ -60,13 +53,5 @@ class Sitemap
     public function getLastModified()
     {
         return $this->lastModified;
-    }
-
-    /**
-     * @return string
-     */
-    public function getUrl()
-    {
-        return $this->url;
     }
 }
