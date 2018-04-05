@@ -8,6 +8,7 @@ interface SitemapValidator
 {
     /**
      * @param Sitemap $sitemap
+     * @param ValidationResultsBag $validationResultsBag
      */
-    public function validate(Sitemap $sitemap);
+    public function validate(Sitemap $sitemap, ValidationResultsBag $validationResultsBag);
 }
