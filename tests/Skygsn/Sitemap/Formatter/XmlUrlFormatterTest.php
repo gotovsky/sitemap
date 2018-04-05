@@ -14,13 +14,11 @@ class XmlUrlFormatterTest extends TestCase
     {
         $formatter = new XmlUrlFormatter();
 
-        $url = new Url('http://skygsn.com/cheats/index.html', '2012-11-22');
+        $url = new Url('http://skygsn.com/cheats/index.html');
 
         $expectedXml = sprintf(
-            '<url><loc>%s</loc><priority>%s</priority><changefreq>%s</changefreq></url>',
-            'http://skygsn.com/cheats/index.html',
-            '0.5',
-            'weekly'
+            '<url><loc>%s</loc></url>',
+            'http://skygsn.com/cheats/index.html'
         );
 
         $this->assertEquals($expectedXml, $formatter->format($url));
