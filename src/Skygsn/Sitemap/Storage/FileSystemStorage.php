@@ -7,6 +7,11 @@ use Skygsn\Sitemap\Exception\StorageException;
 class FileSystemStorage implements Storage
 {
     /**
+     * @var string[]
+     */
+    private $usedNames = [];
+
+    /**
      * @var string
      */
     private $directory;
@@ -30,11 +35,34 @@ class FileSystemStorage implements Storage
     /**
      * @param string $name
      * @param string $content
+     * @return string
      */
-    public function save(string $name, string $content)
+    public function save(string $name, string $content): string
     {
-        $file = fopen(dirname($_SERVER['SCRIPT_FILENAME']) . '/../web/sitemap/' . $name . '.xml', 'w+');
+        $name = $this->fetchCurrentName($name);
+        $file = fopen(sprintf('%s/%s', $this->directory, $name), 'w+');
+
         fputs($file, $content);
         fclose($file);
+
+        return $name;
+    }
+
+    /**
+     * @param string $name
+     * @return string
+     */
+    private function fetchCurrentName(string $name): string
+    {
+        if (empty($name)) {
+            $name = 'sitemap';
+        }
+
+        if (in_array($name, $this->usedNames)) {
+            $name = $name . count($this->usedNames);
+            $this->usedNames[] = $name;
+        }
+
+        return sprintf('%s.xml', $name);
     }
 }
