@@ -2,20 +2,24 @@
 
 namespace Skygsn\Sitemap\Formatter;
 
+use Skygsn\Sitemap\Config;
 use Skygsn\Sitemap\Sitemap;
+use Skygsn\Sitemap\Validator\ValidationResultsBag;
 
 interface SitemapFormatter
 {
     /**
-     * @param Sitemap $sitemap
+     * @param string[] $sitemapNames
+     * @param Config $config
      * @return string
      */
-    public function formatIndex(Sitemap $sitemap);
+    public function formatIndex(array $sitemapNames, Config $config): string;
 
     /**
      * @param Sitemap $sitemap
-     * @param UrlFormatter $urlFormatter
+     * @param ValidationResultsBag $validationResultsBag
+     * @param Config $config
      * @return string
      */
-    public function formatFull(Sitemap $sitemap, UrlFormatter $urlFormatter);
+    public function format(Sitemap $sitemap, ValidationResultsBag $validationResultsBag, Config $config): string;
 }
