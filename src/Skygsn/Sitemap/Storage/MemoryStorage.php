@@ -12,12 +12,15 @@ class MemoryStorage implements Storage
     /**
      * @param string $name
      * @param string $content
+     * @return string
      */
-    public function save(string $name, string $content)
+    public function save(string $name, string $content): string
     {
         $this->resource = fopen('php://temp', 'r+');
         fwrite($this->resource, $content);
         rewind($this->resource);
+
+        return $name;
     }
 
     /**
