@@ -7,13 +7,6 @@ use Skygsn\Sitemap\Formatter\UrlFormatter;
 use Skygsn\Sitemap\Storage\Storage;
 use Skygsn\Sitemap\Validator\ValidationResultsBag;
 
-/**
- * 1. Можно передать много файлов, если больше одного автоматически создается индексный файл
- * 2. Если передан один файл но в нем больше 50000 адресов так же создается индексный файл (если указано название то name1, name2, name3, если нет то sitemap1, sitemap2)
- * 3. Препроцессоры: например, проверяющий при генерации на корректный ответ сервера
- * 4. Сжатие gzip
- */
-
 class Generator
 {
     /**
@@ -112,6 +105,4 @@ class Generator
     {
         return $this->validationResultsBag->getWarnings();
     }
-
-
 }
