@@ -3,65 +3,106 @@
 namespace Skygsn\Sitemap;
 
 use Skygsn\Sitemap\Formatter\SitemapFormatter;
-use Skygsn\Sitemap\Formatter\XmlSitemapFormatter;
-use Skygsn\Sitemap\Formatter\XmlUrlFormatter;
+use Skygsn\Sitemap\Formatter\UrlFormatter;
+use Skygsn\Sitemap\Storage\Storage;
+use Skygsn\Sitemap\Validator\ValidationResultsBag;
 
 class Generator
 {
     /**
+     * @var Config
+     */
+    private $config;
+
+    /**
+     * @var Storage
+     */
+    private $storage;
+
+    /**
+     * @var SitemapFormatter
+     */
+    private $sitemapFormatter;
+
+    /**
+     * @var ValidationResultsBag
+     */
+    private $validationResultsBag;
+
+    /**
+     * @param Config $config
+     * @param Storage $storage
+     * @param SitemapFormatter $sitemapFormatter
+     * @param UrlFormatter $urlFormatter
+     * @param ValidationResultsBag $validationResultsBag
+     */
+    public function __construct(
+        Config $config,
+        Storage $storage,
+        SitemapFormatter $sitemapFormatter,
+        ValidationResultsBag $validationResultsBag
+    ) {
+        $this->config = $config;
+        $this->storage = $storage;
+        $this->sitemapFormatter = $sitemapFormatter;
+        $this->validationResultsBag = $validationResultsBag;
+    }
+
+    /**
      * @param Sitemap[] $sitemaps
-     * @return string
      */
     public function create(array $sitemaps)
     {
-        $formatter = new XmlSitemapFormatter();
-
-        foreach ($sitemaps as $sitemap) {
-            $this->createSitemapFile($formatter->formatFull($sitemap, new XmlUrlFormatter()), $sitemap->getName());
+        if (empty($sitemaps)) {
+            return;
         }
 
-        $this->createIndicesFile($this->createSitemapIndices($sitemaps, $formatter));
-    }
+        if (count($sitemaps) == 1) {
+            $formattedSitemap = $this->sitemapFormatter->format(
+                current($sitemaps),
+                $this->validationResultsBag, $this->config
+            );
 
-    /**
-     * @param array $sitemaps
-     * @param SitemapFormatter $formatter
-     * @return string
-     */
-    private function createSitemapIndices(array $sitemaps, SitemapFormatter $formatter)
-    {
-        $sitemapIndices = '<?xml version="1.0" encoding="UTF-8"?>
-<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-';
-
-        foreach ($sitemaps as $sitemap) {
-            $sitemapIndices .= $formatter->formatIndex($sitemap);
+            if (!$this->validationResultsBag->hasErrors()) {
+                $this->storage->save(current($sitemaps)->getName(), $formattedSitemap);
+            }
         }
 
-        $sitemapIndices .= '
-</sitemapindex>';
+        if (count($sitemaps) > 1) {
+            $formattedSitemaps = [];
 
-        return $sitemapIndices;
+            foreach ($sitemaps as $sitemap) {
+                $formattedSitemaps[] = $this->sitemapFormatter->format(
+                    $sitemap,
+                    $this->validationResultsBag,
+                    $this->config
+                );
+            }
+
+            $savedSitemaps = [];
+            if (!$this->validationResultsBag->hasErrors()) {
+                foreach ($sitemaps as $key => $sitemap) {
+                    $savedSitemaps[] = $this->storage->save($sitemap->getName(), $formattedSitemaps[$key]);
+                }
+            }
+
+            $this->storage->save('sitemapindex', $this->sitemapFormatter->formatIndex($savedSitemaps, $this->config));
+        }
     }
 
     /**
-     * @param string $sitemapIndices
+     * @return string[]
      */
-    private function createIndicesFile($sitemapIndices)
+    public function getErrors(): array
     {
-        $file = fopen(dirname($_SERVER['SCRIPT_FILENAME']) . '/../web/sitemap/sitemap.xml', 'w+');
-        fputs($file, $sitemapIndices);
-        fclose($file);
+        return $this->validationResultsBag->getErrors();
     }
 
     /**
-     * @param string $sitemap
-     * @param string $name
+     * @return string[]
      */
-    private function createSitemapFile($sitemap, $name)
+    public function getWarning(): array
     {
-        $file = fopen(dirname($_SERVER['SCRIPT_FILENAME']) . '/../web/sitemap/' . $name . '.xml', 'w+');
-        fputs($file, $sitemap);
-        fclose($file);
+        return $this->validationResultsBag->getWarnings();
     }
 }

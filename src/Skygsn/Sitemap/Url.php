@@ -2,6 +2,8 @@
 
 namespace Skygsn\Sitemap;
 
+use DateTime;
+
 class Url
 {
     /**
@@ -10,7 +12,7 @@ class Url
     private $location;
 
     /**
-     * @var string
+     * @var DateTime
      */
     private $lastModified;
 
@@ -26,12 +28,16 @@ class Url
 
     /**
      * @param string $location
-     * @param string $lastModified
+     * @param DateTime $lastModified
      * @param string $changeFrequency
      * @param float $priority
      */
-    public function __construct($location, $lastModified, $changeFrequency = 'weekly', $priority = 0.5)
-    {
+    public function __construct(
+        string $location,
+        DateTime $lastModified = null,
+        string $changeFrequency = '',
+        float $priority = null
+    ) {
         $this->location = $location;
         $this->lastModified = $lastModified;
         $this->changeFrequency = $changeFrequency;
@@ -41,13 +47,13 @@ class Url
     /**
      * @return string
      */
-    public function getLocation()
+    public function getLocation(): string
     {
         return $this->location;
     }
 
     /**
-     * @return string
+     * @return DateTime
      */
     public function getLastModified()
     {

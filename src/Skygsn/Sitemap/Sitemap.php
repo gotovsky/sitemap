@@ -2,17 +2,14 @@
 
 namespace Skygsn\Sitemap;
 
+use DateTime;
+
 class Sitemap
 {
     /**
      * @var string
      */
     private $name;
-
-    /**
-     * @var string
-     */
-    private $url;
 
     /**
      * @var Url[]
@@ -26,14 +23,12 @@ class Sitemap
 
     /**
      * @param string $name
-     * @param string $url
      * @param Url[] $urls
      * @param string $lastModified
      */
-    public function __construct($name, $url, array $urls, $lastModified)
+    public function __construct(array $urls, string $name = '', DateTime $lastModified = null)
     {
         $this->name = $name;
-        $this->url = $url;
         $this->urls = $urls;
         $this->lastModified = $lastModified;
     }
@@ -60,13 +55,5 @@ class Sitemap
     public function getLastModified()
     {
         return $this->lastModified;
-    }
-
-    /**
-     * @return string
-     */
-    public function getUrl()
-    {
-        return $this->url;
     }
 }
