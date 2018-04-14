@@ -31,11 +31,11 @@ class Config
     private $siteUrl;
 
     /**
-     * @param string $siteUrl
+     * @param string $sitemapBaseUrl
      */
-    public function __construct(string $siteUrl)
+    public function __construct(string $sitemapBaseUrl)
     {
-        $this->siteUrl = $siteUrl;
+        $this->siteUrl = $sitemapBaseUrl;
     }
 
     /**
