@@ -55,7 +55,7 @@ class FileSystemStorage implements Storage
     private function fetchCurrentName(string $name): string
     {
         if (empty($name)) {
-            $name = 'sitemap';
+            $name = 'urls';
         }
 
         if (in_array($name, $this->usedNames)) {

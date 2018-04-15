@@ -86,7 +86,10 @@ class Generator
                 }
             }
 
-            $this->storage->save('sitemapindex', $this->sitemapFormatter->formatIndex($savedSitemaps, $this->config));
+            $this->storage->save(
+                $this->config->getSitemapIndexName(),
+                $this->sitemapFormatter->formatIndex($savedSitemaps, $this->config)
+            );
         }
     }
 

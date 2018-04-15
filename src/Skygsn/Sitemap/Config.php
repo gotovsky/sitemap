@@ -28,6 +28,11 @@ class Config
     /**
      * @var string
      */
+    private $sitemapIndexName = 'sitemap';
+
+    /**
+     * @var string
+     */
     private $siteUrl;
 
     /**
@@ -98,5 +103,21 @@ class Config
     public function getSitemapBaseUrl(): string
     {
         return $this->siteUrl;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSitemapIndexName(): string
+    {
+        return $this->sitemapIndexName;
+    }
+
+    /**
+     * @param string $sitemapIndexName
+     */
+    public function setSitemapIndexName(string $sitemapIndexName)
+    {
+        $this->sitemapIndexName = $sitemapIndexName;
     }
 }
