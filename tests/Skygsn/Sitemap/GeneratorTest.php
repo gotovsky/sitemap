@@ -3,6 +3,7 @@
 namespace Skygsn\Sitemap;
 
 use DateTime;
+use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use Skygsn\Sitemap\Formatter\XmlSitemapFormatter;
 use Skygsn\Sitemap\Formatter\XmlUrlFormatter;
@@ -60,12 +61,16 @@ class GeneratorTest extends TestCase
 
         $sitemapFromStorage = stream_get_contents($this->storage->getResource());
 
-        $this->assertEquals('<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas' .
+        $expectedXml = '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas' .
             '/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sit' .
             'emaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd"><url><loc>' .
-            'http://skygsn.com/chessblack-nya.html</loc><lastmod>2015-12-25</lastmod></url></urlset>',
-            $sitemapFromStorage
-        );
+            'http://skygsn.com/chessblack-nya.html</loc><lastmod>2015-12-25</lastmod></url></urlset>';
+
+        $doc = new DOMDocument('1.0', 'UTF-8');
+        $doc->formatOutput = true;
+        $doc->loadXML($expectedXml);
+
+        $this->assertEquals($doc->saveXML(), $sitemapFromStorage);
     }
 
     /**
@@ -86,12 +91,15 @@ class GeneratorTest extends TestCase
 
         $sitemapFromStorage = stream_get_contents($this->storage->getResource());
 
-        $this->assertEquals(
-            '<?xml version="1.0" encoding="UTF-8"?><sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' .
+        $expectedXml = '<?xml version="1.0" encoding="UTF-8"?><sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' .
             '<sitemap><loc>http://skygsn.com/sitemap/chessblack.xml</loc></sitemap>' .
-            '<sitemap><loc>http://skygsn.com/sitemap/nya.xml</loc></sitemap></sitemapindex>',
-            $sitemapFromStorage
-        );
+            '<sitemap><loc>http://skygsn.com/sitemap/nya.xml</loc></sitemap></sitemapindex>';
+
+        $doc = new DOMDocument('1.0', 'UTF-8');
+        $doc->formatOutput = true;
+        $doc->loadXML($expectedXml);
+
+        $this->assertEquals($doc->saveXML(), $sitemapFromStorage);
     }
 
     /**
