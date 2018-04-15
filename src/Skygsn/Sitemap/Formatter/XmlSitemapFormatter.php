@@ -2,6 +2,7 @@
 
 namespace Skygsn\Sitemap\Formatter;
 
+use DOMDocument;
 use Skygsn\Sitemap\Config;
 use Skygsn\Sitemap\Sitemap;
 use Skygsn\Sitemap\Validator\ValidationResultsBag;
@@ -35,10 +36,12 @@ class XmlSitemapFormatter implements SitemapFormatter
             );
         }
 
-        return sprintf('<?xml version="1.0" encoding="UTF-8"?><sitemapindex xmlns="http://www.sitemaps.org/schemas/' .
+        $xml = sprintf('<?xml version="1.0" encoding="UTF-8"?><sitemapindex xmlns="http://www.sitemaps.org/schemas/' .
             'sitemap/0.9">%s</sitemapindex>',
             implode('', $sitemapUrls)
         );
+
+        return $this->createFormattedXml($xml)->saveXML();
     }
 
     /**
@@ -50,12 +53,14 @@ class XmlSitemapFormatter implements SitemapFormatter
             $sitemapValidator->validate($sitemap, $this->$validationResultsBag);
         }
 
-        return sprintf('<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/' .
+        $xml = sprintf('<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/' .
             'sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"' .
             ' xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9' .
             ' http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">%s</urlset>',
             $this->getFormattedUrls($sitemap, $validationResultsBag, $config)
         );
+
+        return $this->createFormattedXml($xml)->saveXML();
     }
 
     /**
@@ -80,5 +85,18 @@ class XmlSitemapFormatter implements SitemapFormatter
         }
 
         return implode('', $formattedUrls);
+    }
+
+    /**
+     * @param string $xml
+     * @return DOMDocument
+     */
+    private function createFormattedXml(string $xml): DOMDocument
+    {
+        $document = new DOMDocument('1.0', 'UTF-8');
+        $document->formatOutput = true;
+        $document->loadXML($xml);
+
+        return $document;
     }
 }
