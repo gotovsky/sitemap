@@ -3,6 +3,7 @@
 namespace Skygsn\Sitemap;
 
 use DateTime;
+use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use Skygsn\Sitemap\Formatter\XmlSitemapFormatter;
 use Skygsn\Sitemap\Formatter\XmlUrlFormatter;
