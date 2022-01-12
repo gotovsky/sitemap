@@ -2,6 +2,8 @@
 
 namespace Skygsn\Sitemap;
 
+use DateTime;
+
 class Sitemap
 {
     /**
@@ -24,7 +26,7 @@ class Sitemap
      * @param Url[] $urls
      * @param string $lastModified
      */
-    public function __construct(array $urls, string $name, $lastModified)
+    public function __construct(array $urls, string $name = '', DateTime $lastModified = null)
     {
         $this->name = $name;
         $this->urls = $urls;
